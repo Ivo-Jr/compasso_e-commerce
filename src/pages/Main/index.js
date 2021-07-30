@@ -1,78 +1,81 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
-import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { FaGithubAlt, FaPlus, FaSpinner, FaRegTrashAlt } from 'react-icons/fa';
 
 import api from '../../services/api';
 
 import { Container } from '../components/Container';
 import { Form, SubmitButton, List } from './styles';
+import LinkComponent from '../components/Link';
 
 export default function Main() {
-  const [repo, setRepo] = useState([]);
+  const [repository, setRepository] = useState([]);
   const [newRepo, setNewRepo] = useState('');
-  const [lastRepo, setLastRepo] = useState('');
-
   const [loading, setLoading] = useState(null);
+
+  const [repoArray, setRepoArray] = useState([]);
+
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
     const storageRepo = localStorage.getItem('repositoriesLS');
 
     if (storageRepo) {
-      setRepo(JSON.parse(storageRepo));
+      setRepository(JSON.parse(storageRepo));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('repositoriesLS', JSON.stringify(repo));
-  }, [repo]);
+    localStorage.setItem('repositoriesLS', JSON.stringify(repository));
+  }, [repository]);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    setLastRepo(newRepo);
-  }
-
-  useEffect(() => {
     setLoading(true);
-    async function handleRepo() {
-      try {
-        if (lastRepo) {
-          const response = await api.get(`/repos/${lastRepo}`);
 
-          const data = {
-            name: response.data.full_name,
-          };
-          setRepo([...repo, newRepo]);
-        }
-      } catch (err) {
-        console.log(err.message);
-      }
+    try {
+      const response = await api.get(`/repos/${newRepo}`);
 
-      setLoading(false);
+      const data = {
+        name: response.data.full_name,
+        avatar: response.data.owner.avatar_url,
+      };
+
+      setRepository([...repository, data]);
+    } catch (err) {
+      console.log(err.message);
     }
 
+    setLoading(false);
     setNewRepo('');
-    handleRepo();
-  }, [lastRepo]);
+  }
+
+  function handleDelete(index) {
+    repository.splice(index, 1);
+
+    localStorage.setItem('repositoriesLS', JSON.stringify(repository));
+    setUpdate(!update);
+  }
 
   return (
     <Container>
       <h1>
         <FaGithubAlt />
-        Repositórios
+        Usuários
       </h1>
 
       <Form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Adicionar repositório"
+          placeholder="Adicionar usuário"
           value={newRepo}
           onChange={e => setNewRepo(e.target.value)}
         />
 
-        <SubmitButton type="button" /* onClick={handleAdd} */ loading={loading}>
+        <SubmitButton type="button" loading={loading}>
           {loading ? (
             <FaSpinner color="#FFF" size={14} />
           ) : (
@@ -82,12 +85,17 @@ export default function Main() {
       </Form>
 
       <List>
-        {repo.map(repos => (
-          <li key={repos}>
-            <span>{repos}</span>
-            <Link to={`/repository/${encodeURIComponent(repos)}`}>
-              Detalhes
-            </Link>
+        {repository.map((repo, index) => (
+          <li key={index}>
+            <div>
+              <img src={repo.avatar} alt="" />
+              <LinkComponent reposLink={repo.name}>
+                <span>{repo.name}</span>
+              </LinkComponent>
+            </div>
+            <button type="button">
+              <FaRegTrashAlt size={19} onClick={() => handleDelete(index)} />
+            </button>
           </li>
         ))}
       </List>

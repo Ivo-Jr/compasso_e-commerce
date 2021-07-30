@@ -43,9 +43,6 @@ export default function Repository({ match }) {
     handleRepository();
   }, []);
 
-  // console.log(repository);
-  // console.log(issues);
-
   return (
     <div>
       {loading ? (

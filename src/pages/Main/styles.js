@@ -48,7 +48,7 @@ export const SubmitButton = styled.button.attrs(props => ({
   type: 'submit',
   disabled: props.loading,
 }))`
-  background: #fe8100;
+  background: linear-gradient(69deg, #d20108, #f80 73%, #f9b600);
   border: 0;
   padding: 0 15px;
   margin-left: 10px;
@@ -91,9 +91,47 @@ export const List = styled.ul`
       border-top: 1px solid #eee;
     }
 
+    div {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
     a {
-      color: #fe8100;
+      font-weight: bold;
+      color: #333;
       text-decoration: none;
+    }
+
+    svg {
+      margin-right: 0px;
+      margin: 1px 3px;
+    }
+
+    button {
+      margin-left: 25px;
+      border: 1px solid #333;
+      border-radius: 4px;
+
+      &:hover {
+        opacity: 0.8;
+        transition: 0.2s;
+      }
+    }
+
+    img {
+      width: 36px;
+      height: 36px;
+      margin-right: 8px;
+      border-radius: 50%;
+      border: 2px solid #eee;
+    }
+
+    span {
+      &:hover {
+        color: #fe8100;
+        transition: 0.2s;
+      }
     }
   }
 `;
