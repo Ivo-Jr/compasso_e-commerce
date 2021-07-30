@@ -6,6 +6,7 @@ import Main from './pages/Main';
 import Repository from './pages/Repository';
 import Starred from './pages/Starred';
 import Experimento from './pages/Experimento';
+import User from './pages/User';
 
 export default function Routes() {
   return (
@@ -15,6 +16,7 @@ export default function Routes() {
         <Route path="/repository/:repository" component={Repository} />
         <Route path="/starred" component={Starred} />
         <Route path="/experimento" component={Experimento} />
+        <Route path="/user" component={User} />
       </Switch>
     </BrowserRouter>
   );
