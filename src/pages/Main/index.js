@@ -1,6 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable no-unused-vars */
+
+// https://api.github.com/users/NOME_USUARIO;
+
 import React, { useEffect, useState } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner, FaRegTrashAlt } from 'react-icons/fa';
 
@@ -11,11 +14,11 @@ import { Form, SubmitButton, List } from './styles';
 import LinkComponent from '../components/Link';
 
 export default function Main() {
-  const [repository, setRepository] = useState([]);
-  const [newRepo, setNewRepo] = useState('');
+  const [users, setUsers] = useState([]);
+  const [newUser, setNewUser] = useState('');
   const [loading, setLoading] = useState(null);
 
-  const [repoArray, setRepoArray] = useState([]);
+  // const [repoArray, setRepoArray] = useState([]);
 
   const [update, setUpdate] = useState(false);
 
@@ -23,13 +26,13 @@ export default function Main() {
     const storageRepo = localStorage.getItem('repositoriesLS');
 
     if (storageRepo) {
-      setRepository(JSON.parse(storageRepo));
+      setUsers(JSON.parse(storageRepo));
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('repositoriesLS', JSON.stringify(repository));
-  }, [repository]);
+    localStorage.setItem('repositoriesLS', JSON.stringify(users));
+  }, [users]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -37,26 +40,27 @@ export default function Main() {
     setLoading(true);
 
     try {
-      const response = await api.get(`/repos/${newRepo}`);
+      const response = await api.get(`/users/${newUser}`);
 
       const data = {
-        name: response.data.full_name,
-        avatar: response.data.owner.avatar_url,
+        name: response.data.login,
+        avatar: response.data.avatar_url,
       };
 
-      setRepository([...repository, data]);
+      setUsers([...users, data]);
+      console.log(data);
     } catch (err) {
       console.log(err.message);
     }
 
     setLoading(false);
-    setNewRepo('');
+    setNewUser('');
   }
 
   function handleDelete(index) {
-    repository.splice(index, 1);
+    users.splice(index, 1);
 
-    localStorage.setItem('repositoriesLS', JSON.stringify(repository));
+    localStorage.setItem('repositoriesLS', JSON.stringify(users));
     setUpdate(!update);
   }
 
@@ -71,8 +75,8 @@ export default function Main() {
         <input
           type="text"
           placeholder="Adicionar usuário"
-          value={newRepo}
-          onChange={e => setNewRepo(e.target.value)}
+          value={newUser}
+          onChange={e => setNewUser(e.target.value)}
         />
 
         <SubmitButton type="button" loading={loading}>
@@ -85,12 +89,12 @@ export default function Main() {
       </Form>
 
       <List>
-        {repository.map((repo, index) => (
+        {users.map((user, index) => (
           <li key={index}>
             <div>
-              <img src={repo.avatar} alt="" />
-              <LinkComponent reposLink={repo.name}>
-                <span>{repo.name}</span>
+              <img src={user.avatar} alt="" />
+              <LinkComponent reposLink={user.name}>
+                <span>{user.name}</span>
               </LinkComponent>
             </div>
             <button type="button">
