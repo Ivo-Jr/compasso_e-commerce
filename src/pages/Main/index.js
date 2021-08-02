@@ -6,12 +6,14 @@
 
 import React, { useEffect, useState } from 'react';
 import { FaGithubAlt, FaPlus, FaSpinner, FaRegTrashAlt } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
+import User from '../User';
 import api from '../../services/api';
-
 import { Container } from '../components/Container';
-import { Form, SubmitButton, List } from './styles';
 import LinkComponent from '../components/Link';
+
+import { Form, SubmitButton, List } from './styles';
 
 export default function Main() {
   const [users, setUsers] = useState([]);
@@ -43,12 +45,17 @@ export default function Main() {
       const response = await api.get(`/users/${newUser}`);
 
       const data = {
-        name: response.data.login,
         avatar: response.data.avatar_url,
+        name: response.data.name,
+        login: response.data.login,
+        bio: response.data.bio,
+        followers: response.data.followers,
+        following: response.data.following,
+        stars: 'n',
       };
 
       setUsers([...users, data]);
-      console.log(data);
+      console.log(response);
     } catch (err) {
       console.log(err.message);
     }
@@ -93,9 +100,13 @@ export default function Main() {
           <li key={index}>
             <div>
               <img src={user.avatar} alt="" />
-              <LinkComponent reposLink={user.name}>
+              {/* <LinkComponent reposLink={user.name} >
                 <span>{user.name}</span>
-              </LinkComponent>
+              </LinkComponent> */}
+              <Link to="/user">
+                {/* <User user={user} /> */}
+                <span>{user.name}</span>
+              </Link>
             </div>
             <button type="button">
               <FaRegTrashAlt size={19} onClick={() => handleDelete(index)} />
