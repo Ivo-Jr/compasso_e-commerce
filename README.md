@@ -84,6 +84,25 @@ Requisitos Obrigatórios:
 - Tudo será avaliado, dê o seu melhor!
 
 
-
 ----
+
+## :information_source: How To Use
+
+To clone and run this application, you'll need [Git](https://git-scm.com), [Node.js v12.18.4][nodejs] or higher + [Yarn v1.22][yarn] or higher installed on your computer. From your command line:
+
+```bash
+# Clone this repository
+$ git clone https://github.com/Ivo-Jr/compasso_e-commerce.git
+
+# Go into the repository
+$ cd compasso_e-commerce
+
+# Install dependencies
+$ yarn or npm install
+
+# Run the app
+$ yarn or npm start
+```
+
+Made with ♥ by Ivo Junior :wave: [Get in touch!](https://www.linkedin.com/in/jos%C3%A9-ivo-maciel-j%C3%BAnior-658136145/)
 
