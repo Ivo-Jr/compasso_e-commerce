@@ -9,6 +9,20 @@ export const Card = styled.div`
   padding: 30px;
   margin: 80px auto;
 
+  .avatar {
+    display: flex;
+    justify-content: center;
+    flex-direction: center;
+
+    img {
+      margin: 15px 0 5px;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 3px solid #fe8100;
+    }
+  }
+
   .linkMain {
     align-items: center;
     text-align: right;

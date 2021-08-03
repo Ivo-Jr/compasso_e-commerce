@@ -12,6 +12,7 @@ import User from '../User';
 import api from '../../services/api';
 import { Container } from '../components/Container';
 import LinkComponent from '../components/Link';
+import { useData } from '../context/Data';
 
 import { Form, SubmitButton, List } from './styles';
 
@@ -19,10 +20,9 @@ export default function Main() {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState('');
   const [loading, setLoading] = useState(null);
-
-  // const [repoArray, setRepoArray] = useState([]);
-
   const [update, setUpdate] = useState(false);
+
+  const { userContext, setUserContext } = useData([]);
 
   useEffect(() => {
     const storageRepo = localStorage.getItem('repositoriesLS');
@@ -99,12 +99,17 @@ export default function Main() {
         {users.map((user, index) => (
           <li key={index}>
             <div>
-              <img src={user.avatar} alt="" />
-              {/* <LinkComponent reposLink={user.name} >
+              <img src={user.avatar} alt="user" />
+              {/*  <LinkComponent reposLink={user.name}>
                 <span>{user.name}</span>
               </LinkComponent> */}
-              <Link to="/user">
-                {/* <User user={user} /> */}
+              {/*               <Link to="/user" onClick={() => setUserContext(user)}>
+                <span>{user.name}</span>
+              </Link> */}
+              <Link
+                to={`/user/${encodeURIComponent(user.login)}`}
+                onClick={() => setUserContext(user)}
+              >
                 <span>{user.name}</span>
               </Link>
             </div>

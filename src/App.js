@@ -1,17 +1,21 @@
 /* eslint-disable import/named */
 import React from 'react';
 
+import DataProvider from './pages/context/Data';
+import RepositoryProvider from './pages/context/Repository';
 import Routes from './routes';
+
 import GlobalStyle from './styles/global';
-import { DataProvider } from './pages/context/userData';
 
 function App() {
   return (
     <>
-      <DataProvider>
-        <Routes />
-        <GlobalStyle />
-      </DataProvider>
+      <RepositoryProvider>
+        <DataProvider>
+          <Routes />
+          <GlobalStyle />
+        </DataProvider>
+      </RepositoryProvider>
     </>
   );
 }
