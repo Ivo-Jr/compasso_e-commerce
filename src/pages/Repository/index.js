@@ -1,43 +1,56 @@
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaSpinner } from 'react-icons/fa';
-import api from '../../services/api';
+import { AiOutlineLaptop } from 'react-icons/ai';
+import { IoIosArrowBack } from 'react-icons/io';
 
+import api from '../../services/api';
 import { Container } from '../components/Container';
-// eslint-disable-next-line import/named
-import { Loading, Owner, IssuesList } from './styles';
+import { useData } from '../context/Data';
+// import {} from '../context/Data';
+
+import { Loading, Owner, RepositoryList, PageAction } from './styles';
 
 export default function Repository({ match }) {
   const [repository, setRepository] = useState({});
   const [issues, setIssues] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { login } = match.params;
+  const [page, setPage] = useState(1);
+
+  const { userContext } = useData();
 
   async function handleRepository() {
-    if (match) {
-      const repoName = decodeURIComponent(match.params.repository);
-
+    if (login) {
       try {
-        const [repositoryAPI, issuesAPI] = await Promise.all([
-          api.get(`/repos/${repoName}`),
-          api.get(`/repos/${repoName}/issues`, {
-            params: {
-              state: 'open',
-              per_page: 5,
-            },
-          }),
-        ]);
+        const response = await api.get(`/users/${login}/repos`, {
+          params: {
+            per_page: 15,
+            page: `${page}`,
+          },
+        });
 
-        setRepository(repositoryAPI.data);
-        setIssues(issuesAPI.data);
+        // console.log(response);
+
+        setRepository(response.data);
       } catch (err) {
         console.log(err.message);
       }
     }
     setLoading(false);
   }
+
+  // function handlePage(action) {
+  //   const currentPage = page;
+
+  //   setPage(action === 'back' ? page - 1 : page + 1);
+
+  //   handleRepository();
+  // }
 
   useEffect(() => {
     handleRepository();
@@ -47,33 +60,64 @@ export default function Repository({ match }) {
     <div>
       {loading ? (
         <Loading loading={loading}>
-          Carregando... <FaSpinner color="#fff" size={26} />{' '}
+          Loading... <FaSpinner color="#fff" size={26} />{' '}
         </Loading>
       ) : (
         <Container>
           <Owner>
-            <Link to="/">Voltar aos repositórios</Link>
-            <img
-              src={repository.owner.avatar_url}
-              alt={repository.owner.login}
-            />
-            <h1>{repository.name}</h1>
-            <p>{repository.description}</p>
+            <div className="linkMain">
+              <Link to="/">Back to users </Link>
+            </div>
+
+            <div className="profile">
+              <img src={userContext.avatar} alt={userContext.login} />
+              <Link to={`/user/${userContext.login}`}>
+                <h1>{userContext.name}</h1>
+              </Link>
+              <p>{userContext.login}</p>
+            </div>
           </Owner>
 
-          <IssuesList>
-            {issues.map(issue => (
-              <li key={String(issue.id)}>
-                <img src={issue.user.avatar_url} alt={issue.user.login} />
-                <div>
+          <RepositoryList>
+            {repository.map(repo => (
+              <li key={repo.id}>
+                <div className="title">
                   <strong>
-                    <a href={issue.html_url}>{issue.title}</a>
+                    <a href={repo.html_url} target="_blank">
+                      {repo.name}
+                    </a>
                   </strong>
-                  <p>{issue.user.login}</p>
+                  <p>{repo.description}</p>
+                </div>
+
+                <div className="language">
+                  {repo.language ? (
+                    <>
+                      {' '}
+                      <AiOutlineLaptop color="orange" size={17} />
+                      <small>{repo.language}</small>{' '}
+                    </>
+                  ) : (
+                    ''
+                  )}
                 </div>
               </li>
             ))}
-          </IssuesList>
+          </RepositoryList>
+
+          {/* <PageAction>
+            <button
+              onClick={() => handlePage('back')}
+              type="button"
+              disabled={page < 2}
+            >
+              <IoIosArrowBack size={13} />
+            </button>
+            <span> Page {page} </span>
+            <button onClick={() => handlePage('next')} type="button">
+              <IoIosArrowBack size={13} className="rotated" />
+            </button>
+          </PageAction> */}
         </Container>
       )}
     </div>

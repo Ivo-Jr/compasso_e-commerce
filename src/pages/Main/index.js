@@ -21,6 +21,7 @@ export default function Main() {
   const [newUser, setNewUser] = useState('');
   const [loading, setLoading] = useState(null);
   const [update, setUpdate] = useState(false);
+  const [error, setError] = useState(null);
 
   const { userContext, setUserContext } = useData([]);
 
@@ -54,8 +55,19 @@ export default function Main() {
         stars: 'n',
       };
 
+      const userValidation = users.map(user => user.name);
+
+      if (userValidation.includes(data.name)) {
+        alarmUser('duplicate');
+        throw new Error('Duplicate user');
+      }
+
+      if (!data) {
+        alarmUser('doesNotExists');
+        throw new Error('User does not exists');
+      }
+
       setUsers([...users, data]);
-      console.log(response);
     } catch (err) {
       console.log(err.message);
     }
@@ -71,17 +83,25 @@ export default function Main() {
     setUpdate(!update);
   }
 
+  function alarmUser(param) {
+    if (param === 'duplicate') {
+      alert('User has already been added');
+    } else {
+      alert('User does not exists');
+    }
+  }
+
   return (
-    <Container>
+    <Container error={false}>
       <h1>
         <FaGithubAlt />
-        Usuários
+        Search Users
       </h1>
 
       <Form onSubmit={handleSubmit}>
         <input
           type="text"
-          placeholder="Adicionar usuário"
+          placeholder="Search for user login"
           value={newUser}
           onChange={e => setNewUser(e.target.value)}
         />
