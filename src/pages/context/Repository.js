@@ -2,22 +2,20 @@
 /* eslint-disable react/prop-types */
 import React, { createContext, useContext, useState } from 'react';
 
-const DataRepository = createContext();
+const DataStarred = createContext();
 
 export default function RepositoryProvider({ children }) {
-  const [repositoryContext, setRepositoryContext] = useState([]);
+  const [starredContext, setStarredContex] = useState([]);
 
   return (
-    <DataRepository.Provider
-      value={{ repositoryContext, setRepositoryContext }}
-    >
+    <DataStarred.Provider value={{ starredContext, setStarredContex }}>
       {children}
-    </DataRepository.Provider>
+    </DataStarred.Provider>
   );
 }
 
-export function useRepository() {
-  const contex = useContext(DataRepository);
-  const { repositoryContext, setRepositoryContext } = contex;
-  return { repositoryContext, setRepositoryContext };
+export function useStarred() {
+  const contex = useContext(DataStarred);
+  const { starredContext, setStarredContex } = contex;
+  return { starredContext, setStarredContex };
 }

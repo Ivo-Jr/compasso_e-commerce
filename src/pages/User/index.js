@@ -1,19 +1,47 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React from 'react';
+
+// https://api.github.com/users/NOME_USUARIO/starred
+
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { IoMdPeople } from 'react-icons/io';
 import { AiOutlineStar } from 'react-icons/ai';
 
+import api from '../../services/api';
 import { useData } from '../context/Data';
-import { useRepository } from '../context/Repository';
+import { useStarred } from '../context/Repository';
 
 import { Card } from './styles';
 
 export default function User({ match }) {
   const { userContext } = useData();
-  const { repositoryContext } = useRepository();
+  const { starredContext, setStarredContex } = useStarred([]);
+  const { carregan, setCarregan } = useState(null);
   const { url } = match;
+
+  async function handleStarred() {
+    const response = await api.get(`users/${userContext.login}/starred`);
+
+    const data = response.data.map(item => ({
+      name: item.name,
+      description: item.description,
+      language: item.language,
+      pushed_at: item.pushed_at,
+      forks: item.forks,
+      stargazers: item.stargazers_count,
+    }));
+
+    setStarredContex(data);
+  }
+
+  setCarregan(true);
+
+  useEffect(() => {
+    handleStarred();
+  }, []);
+
+  console.log(carregan);
 
   return (
     <div>
@@ -43,7 +71,7 @@ export default function User({ match }) {
           </span>
           <span>
             <AiOutlineStar size={15} />
-            <strong>2</strong>
+            <strong>{starredContext.length}</strong>
           </span>
         </div>
 
