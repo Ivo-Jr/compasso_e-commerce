@@ -9,6 +9,7 @@ import { IoMdPeople } from 'react-icons/io';
 import { AiOutlineStar } from 'react-icons/ai';
 
 import api from '../../services/api';
+import Loading from '../components/Loading';
 import { useData } from '../context/Data';
 import { useStarred } from '../context/Repository';
 
@@ -17,7 +18,7 @@ import { Card } from './styles';
 export default function User({ match }) {
   const { userContext } = useData();
   const { starredContext, setStarredContex } = useStarred([]);
-  const { carregan, setCarregan } = useState(null);
+  const [loading, setLoading] = useState(true);
   const { url } = match;
 
   async function handleStarred() {
@@ -33,53 +34,54 @@ export default function User({ match }) {
     }));
 
     setStarredContex(data);
+    // setLoading(false);
   }
-
-  setCarregan(true);
 
   useEffect(() => {
     handleStarred();
   }, []);
 
-  console.log(carregan);
-
   return (
     <div>
-      <Card>
-        <div className="linkMain">
-          <Link to="/">Voltar para buscas</Link>
-        </div>
+      {loading ? (
+        <Loading />
+      ) : (
+        <Card>
+          <div className="linkMain">
+            <Link to="/">Voltar para buscas</Link>
+          </div>
 
-        <div className="avatar">
-          <img src={userContext.avatar} alt="avatar" />
-        </div>
+          <div className="avatar">
+            <img src={userContext.avatar} alt="avatar" />
+          </div>
 
-        <div className="title">
-          <h1>{userContext.name}</h1>
-          <span>{userContext.login}</span>
-        </div>
+          <div className="title">
+            <h1>{userContext.name}</h1>
+            <span>{userContext.login}</span>
+          </div>
 
-        <p>{userContext.bio}</p>
+          <p>{userContext.bio}</p>
 
-        <div className="follow">
-          <span>
-            <IoMdPeople size={15} />
-            <strong>{userContext.followers}</strong> followers
-          </span>
-          <span>
-            <strong>{userContext.following}</strong> following
-          </span>
-          <span>
-            <AiOutlineStar size={15} />
-            <strong>{starredContext.length}</strong>
-          </span>
-        </div>
+          <div className="follow">
+            <span>
+              <IoMdPeople size={15} />
+              <strong>{userContext.followers}</strong> followers
+            </span>
+            <span>
+              <strong>{userContext.following}</strong> following
+            </span>
+            <span>
+              <AiOutlineStar size={15} />
+              <strong>{starredContext.length}</strong>
+            </span>
+          </div>
 
-        <div className="links">
-          <Link to={`${url}/repo`}>Repository</Link>
-          <Link to="/">Starred</Link>
-        </div>
-      </Card>
+          <div className="links">
+            <Link to={`${url}/repo`}>Repository</Link>
+            <Link to="/">Starred</Link>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
