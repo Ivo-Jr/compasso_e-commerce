@@ -34,7 +34,7 @@ export default function User({ match }) {
     }));
 
     setStarredContex(data);
-    // setLoading(false);
+    setLoading(false);
   }
 
   useEffect(() => {
