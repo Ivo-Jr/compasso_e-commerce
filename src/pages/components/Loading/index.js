@@ -9,7 +9,10 @@ export default function Loading() {
     <Container>
       <h1>Loading...</h1>
       <Loader>
-        <div />
+        <section>
+          <div />
+          <div />
+        </section>
       </Loader>
     </Container>
   );

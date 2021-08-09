@@ -78,7 +78,7 @@ export default function User({ match }) {
 
           <div className="links">
             <Link to={`${url}/repo`}>Repository</Link>
-            <Link to="/">Starred</Link>
+            <Link to={`${url}/starred`}>Starred</Link>
           </div>
         </Card>
       )}

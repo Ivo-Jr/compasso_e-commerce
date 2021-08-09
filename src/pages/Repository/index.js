@@ -11,9 +11,10 @@ import { IoIosArrowBack } from 'react-icons/io';
 import api from '../../services/api';
 import { Container } from '../components/Container';
 import { useData } from '../context/Data';
+import Loading from '../components/Loading';
 // import {} from '../context/Data';
 
-import { Loading, Owner, RepositoryList, PageAction } from './styles';
+import { Owner, RepositoryList, PageAction } from './styles';
 
 export default function Repository({ match }) {
   const [repository, setRepository] = useState({});
@@ -59,9 +60,10 @@ export default function Repository({ match }) {
   return (
     <div>
       {loading ? (
-        <Loading loading={loading}>
-          Loading... <FaSpinner color="#fff" size={26} />{' '}
-        </Loading>
+        // <Loading loading={loading}>
+        //   Loading... <FaSpinner color="#fff" size={26} />{' '}
+        // </Loading>
+        <Loading />
       ) : (
         <Container>
           <Owner>

@@ -12,9 +12,9 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Main} />
-        <Route path="/starred" exact component={Starred} />
         <Route path="/user/:user" exact component={User} />
-        <Route path="/:user/:login/:repo" exact component={Repository} />
+        <Route path="/:user/:login/repo" exact component={Repository} />
+        <Route path="/:user/:login/starred" exact component={Starred} />
       </Switch>
     </BrowserRouter>
   );

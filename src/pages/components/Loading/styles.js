@@ -33,18 +33,28 @@ export const Loader = styled.div`
   justify-content: center;
   align-items: center;
 
-  div {
+  div:first-child {
     border-radius: 50%;
-    animation: rotate 1s infinite;
-    width: 30px;
-    height: 30px;
-    border: 6px solid #373e47;
-    border-top-color: transparent;
+    animation: rotate 1s cubic-bezier(0.755, 0.05, 0.855, 0.06) infinite;
+    width: 40px;
+    height: 40px;
+    border: 4px solid transparent;
+    border-top-color: #333;
+    position: absolute;
+  }
+
+  div:last-child {
+    border-radius: 50%;
+    animation: rotate 1s cubic-bezier(0.95, 0.085, 0.8, 0.53) infinite;
+    width: 40px;
+    height: 40px;
+    border: 4px solid transparent;
+    border-top-color: #333;
   }
 
   @keyframes rotate {
     to {
-      transform: rotate(360deg);
+      transform: rotate(1turn);
     }
   }
 `;

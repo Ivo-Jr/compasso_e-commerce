@@ -53,6 +53,7 @@ export const Owner = styled.header`
       width: 120px;
       border-radius: 50%;
       margin-top: 20px;
+      border: 3px solid #fe8100;
     }
 
     a {
